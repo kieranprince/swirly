@@ -48,7 +48,7 @@
 				margin-bottom: 2.5rem;
 				text-align: center;
 				max-width: 700px;
-				text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+				text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
 			}
 
 			.toilet-container {
@@ -545,7 +545,6 @@
 		left: 0;
 		width: 100vw;
 		height: 100vh;
-		color: #fff;
 		background: rgba(0, 0, 0, 0.8);
 		padding: 0;
 		border-radius: 0;
@@ -564,15 +563,38 @@
 		margin: 0;
 	"
 		>
+			<span class="popup-rainbow-text"></span>
 		</div>
+		<style>
+			.popup-rainbow-text {
+				display: inline-block;
+				background: linear-gradient(90deg, #ff0080, #ff8c00, #fff200, #00ff00, #00cfff, #2e2bff, #ff00c8, #ff0080);
+				background-size: 2000% 100%;
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+				color: transparent;
+				animation: rainbow-popup-text 8s linear infinite;
+			}
+
+			@keyframes rainbow-popup-text {
+				0% {
+					background-position: 0% 50%;
+				}
+				100% {
+					background-position: 100% 50%;
+				}
+			}
+		</style>
 
 		<button class="flush-button" id="flushButton">FLUSH 🚽</button>
 
 		<script>
-			function showPopup(message: string, duration: number = 5000) {
+			function showPopup(message, duration = 5000) {
 				const popup = document.getElementById('popup-message');
-				if (!popup) return;
-				popup.textContent = message;
+				const rainbowText = popup ? popup.querySelector('.popup-rainbow-text') : null;
+				if (!popup || !rainbowText) return;
+				rainbowText.textContent = message;
 				popup.style.display = 'flex';
 				popup.style.opacity = '0.97';
 				setTimeout(() => {
