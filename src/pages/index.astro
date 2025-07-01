@@ -8,9 +8,591 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>Swirly - The Ultimate Swirly Experience</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				min-height: 100vh;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				font-family: 'Arial', sans-serif;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				overflow-x: hidden;
+			}
+
+			.title {
+				color: white;
+				font-size: 3rem;
+				margin-bottom: 1rem;
+				text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+				animation: pulse 2s ease-in-out infinite alternate;
+			}
+
+			.subtitle {
+				color: rgba(255, 255, 255, 0.8);
+				font-size: 1.2rem;
+				margin-bottom: 2rem;
+				text-align: center;
+				max-width: 600px;
+			}
+
+			.toilet-container {
+				position: relative;
+				width: 300px;
+				height: 400px;
+				margin: 2rem 0;
+			}
+
+			.toilet-bowl {
+				width: 100%;
+				height: 100%;
+				background: #f0f0f0;
+				border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+				position: relative;
+				box-shadow:
+					inset 0 20px 40px rgba(0, 0, 0, 0.2),
+					0 10px 30px rgba(0, 0, 0, 0.3);
+				overflow: hidden;
+				z-index: 1;
+			}
+
+			.drain-hole {
+				position: absolute;
+				bottom: 80px;
+				left: 50%;
+				transform: translateX(-50%);
+				width: 35px;
+				height: 35px;
+				background: radial-gradient(circle, #555 0%, #666 30%, #777 60%, #888 100%);
+				border-radius: 50%;
+				box-shadow:
+					inset 0 4px 8px rgba(0, 0, 0, 0.6),
+					inset 0 -2px 4px rgba(255, 255, 255, 0.1),
+					0 2px 4px rgba(0, 0, 0, 0.3);
+				z-index: 2;
+			}
+
+			.drain-hole::before {
+				content: '';
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 18px;
+				height: 18px;
+				background: #333;
+				border-radius: 50%;
+				box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+			}
+
+			.toilet-rim {
+				position: absolute;
+				top: -10px;
+				left: -10px;
+				right: -10px;
+				height: 40px;
+				background: #e0e0e0;
+				border-radius: 50%;
+				box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+			}
+
+			.water {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				height: 70%;
+				background: radial-gradient(
+					ellipse at center,
+					rgba(100, 150, 255, 0.8) 0%,
+					rgba(50, 100, 200, 0.9) 50%,
+					rgba(30, 80, 180, 1) 100%
+				);
+				border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+				overflow: hidden;
+				transition: all 2s ease;
+				z-index: 3;
+			}
+
+			.water.flushing {
+				height: 70%;
+				background: radial-gradient(
+					ellipse at center,
+					rgba(150, 200, 255, 0.9) 0%,
+					rgba(100, 150, 255, 1) 50%,
+					rgba(50, 100, 200, 1) 100%
+				);
+				animation:
+					water-turbulence 0.1s ease-in-out infinite,
+					water-shrink-to-hole 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+				transform-origin: 50% 80%;
+			}
+
+			.water.refilling {
+				animation: water-refill 3s ease-out forwards;
+			}
+
+			.swirl {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				animation: swirl-gentle 8s linear infinite;
+				transition: all 0.3s ease;
+			}
+
+			.swirl.flushing {
+				animation: swirl-flush 0.3s linear infinite;
+			}
+
+			.swirl::before {
+				content: '';
+				position: absolute;
+				width: 80%;
+				height: 80%;
+				top: 10%;
+				left: 10%;
+				border: 2px solid rgba(255, 255, 255, 0.2);
+				border-radius: 50%;
+				border-top-color: rgba(255, 255, 255, 0.4);
+				animation: spin-gentle 6s linear infinite;
+				transition: all 0.3s ease;
+				transform-origin: 50% 70%;
+			}
+
+			.swirl.flushing::before {
+				border: 4px solid rgba(255, 255, 255, 0.6);
+				border-top-color: rgba(255, 255, 255, 1);
+				animation: spin-flush 0.2s linear infinite;
+				transform-origin: 50% 70%;
+			}
+
+			.swirl::after {
+				content: '';
+				position: absolute;
+				width: 60%;
+				height: 60%;
+				top: 20%;
+				left: 20%;
+				border: 1px solid rgba(255, 255, 255, 0.15);
+				border-radius: 50%;
+				border-top-color: rgba(255, 255, 255, 0.3);
+				animation: spin-gentle-reverse 4s linear infinite reverse;
+				transition: all 0.3s ease;
+				transform-origin: 50% 62.5%;
+			}
+
+			.swirl.flushing::after {
+				border: 3px solid rgba(255, 255, 255, 0.4);
+				border-top-color: rgba(255, 255, 255, 0.8);
+				animation: spin-flush-reverse 0.15s linear infinite reverse;
+				transform-origin: 50% 62.5%;
+			}
+
+			.bubbles {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+			}
+
+			.bubble {
+				position: absolute;
+				background: rgba(255, 255, 255, 0.4);
+				border-radius: 50%;
+				animation: bubble-float-gentle 4s ease-in-out infinite;
+			}
+
+			.bubble.flushing {
+				animation: bubble-float-intense 0.5s ease-in-out infinite;
+			}
+
+			.bubble:nth-child(1) {
+				width: 8px;
+				height: 8px;
+				left: 20%;
+				animation-delay: 0s;
+			}
+
+			.bubble:nth-child(2) {
+				width: 12px;
+				height: 12px;
+				left: 60%;
+				animation-delay: 0.5s;
+			}
+
+			.bubble:nth-child(3) {
+				width: 6px;
+				height: 6px;
+				left: 80%;
+				animation-delay: 1s;
+			}
+
+			.bubble:nth-child(4) {
+				width: 10px;
+				height: 10px;
+				left: 40%;
+				animation-delay: 1.5s;
+			}
+
+			.splash-text {
+				color: white;
+				font-size: 1.5rem;
+				margin-top: 2rem;
+				text-align: center;
+				animation: splash 4s ease-in-out infinite;
+			}
+
+			.flush-button {
+				background: linear-gradient(145deg, #4caf50, #45a049);
+				color: white;
+				border: none;
+				padding: 15px 30px;
+				font-size: 1.2rem;
+				font-weight: bold;
+				border-radius: 25px;
+				cursor: pointer;
+				margin-top: 2rem;
+				box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+				transition: all 0.3s ease;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+			}
+
+			.flush-button:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+				background: linear-gradient(145deg, #5cbf60, #4caf50);
+			}
+
+			.flush-button:active {
+				transform: translateY(0px);
+				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+			}
+
+			.flush-button:disabled {
+				background: #666;
+				cursor: not-allowed;
+				transform: none;
+			}
+
+			.flush-sound {
+				color: #ffeb3b;
+				font-size: 1.8rem;
+				margin-top: 1rem;
+				text-align: center;
+				opacity: 0;
+				transition: all 0.3s ease;
+			}
+
+			.flush-sound.active {
+				opacity: 1;
+				animation: flush-text 0.5s ease-in-out infinite;
+			}
+
+			.warning {
+				color: #ffeb3b;
+				font-size: 1rem;
+				margin-top: 1rem;
+				text-align: center;
+				background: rgba(0, 0, 0, 0.3);
+				padding: 1rem;
+				border-radius: 10px;
+				max-width: 500px;
+			}
+
+			@keyframes swirl-gentle {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+
+			@keyframes swirl-flush {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+
+			@keyframes spin-gentle {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+
+			@keyframes spin-gentle-reverse {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(-360deg);
+				}
+			}
+
+			@keyframes spin-flush {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+
+			@keyframes spin-flush-reverse {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(-360deg);
+				}
+			}
+
+			@keyframes water-turbulence {
+				0% {
+					transform: scale(1) rotate(0deg);
+				}
+				25% {
+					transform: scale(1.02) rotate(2deg);
+				}
+				50% {
+					transform: scale(0.98) rotate(-2deg);
+				}
+				75% {
+					transform: scale(1.01) rotate(1deg);
+				}
+				100% {
+					transform: scale(1) rotate(0deg);
+				}
+			}
+
+			@keyframes water-refill {
+				0% {
+					height: 15%;
+					transform: scale(0.3);
+				}
+				50% {
+					height: 40%;
+					transform: scale(0.7);
+				}
+				100% {
+					height: 70%;
+					transform: scale(1);
+				}
+			}
+
+			@keyframes water-shrink-to-hole {
+				0% {
+					transform: scale(1);
+					border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+				}
+				80% {
+					transform: scale(0.18) translateY(-50px);
+					border-radius: 50%;
+				}
+				100% {
+					transform: scale(0.18) translateY(-50px);
+					border-radius: 50%;
+				}
+			}
+
+			@keyframes bubble-float-gentle {
+				0% {
+					bottom: 0;
+					opacity: 0.4;
+					transform: translateX(0px) scale(1);
+				}
+				50% {
+					opacity: 0.6;
+					transform: translateX(10px) scale(1.1);
+				}
+				100% {
+					bottom: 100%;
+					opacity: 0;
+					transform: translateX(-5px) scale(0.9);
+				}
+			}
+
+			@keyframes bubble-float-intense {
+				0% {
+					bottom: 0;
+					opacity: 0.8;
+					transform: translateX(0px) scale(1);
+				}
+				25% {
+					opacity: 1;
+					transform: translateX(30px) scale(1.3);
+				}
+				50% {
+					opacity: 1;
+					transform: translateX(-20px) scale(1.5);
+				}
+				75% {
+					opacity: 0.8;
+					transform: translateX(15px) scale(1.2);
+				}
+				100% {
+					bottom: 100%;
+					opacity: 0;
+					transform: translateX(-10px) scale(0.8);
+				}
+			}
+
+			@keyframes flush-text {
+				0%,
+				100% {
+					transform: scale(1);
+				}
+				50% {
+					transform: scale(1.1);
+				}
+			}
+
+			@keyframes pulse {
+				0% {
+					transform: scale(1);
+				}
+				100% {
+					transform: scale(1.05);
+				}
+			}
+
+			@keyframes splash {
+				0%,
+				100% {
+					transform: translateY(0px);
+				}
+				25% {
+					transform: translateY(-5px);
+				}
+				50% {
+					transform: translateY(2px);
+				}
+				75% {
+					transform: translateY(-2px);
+				}
+			}
+
+			@media (max-width: 768px) {
+				.title {
+					font-size: 2rem;
+				}
+
+				.toilet-container {
+					width: 250px;
+					height: 350px;
+				}
+
+				.subtitle {
+					font-size: 1rem;
+					padding: 0 1rem;
+				}
+			}
+		</style>
 	</head>
 	<body>
-		<h1>Astro</h1>
+		<h1 class="title">Reedem your FREE Swirly!</h1>
+		<p class="subtitle">You've earned it. Trust me. You have.</p>
+
+		<div class="toilet-container">
+			<div class="toilet-rim"></div>
+			<div class="toilet-bowl">
+				<div class="drain-hole"></div>
+				<div class="water" id="water">
+					<div class="swirl" id="swirl"></div>
+					<div class="bubbles">
+						<div class="bubble" id="bubble1"></div>
+						<div class="bubble" id="bubble2"></div>
+						<div class="bubble" id="bubble3"></div>
+						<div class="bubble" id="bubble4"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<button class="flush-button" id="flushButton">FLUSH 🚽</button>
+
+		<script>
+			function flush() {
+				const water = document.getElementById('water');
+				const swirl = document.getElementById('swirl');
+				const flushButton = document.getElementById('flushButton');
+				const bubbles = [
+					document.getElementById('bubble1'),
+					document.getElementById('bubble2'),
+					document.getElementById('bubble3'),
+					document.getElementById('bubble4'),
+				];
+
+				if (!water || !swirl || !flushButton) return;
+
+				// Cast to HTMLButtonElement for TypeScript
+				const button = flushButton;
+
+				// Disable button during flush
+				button.setAttribute('disabled', 'true');
+				button.textContent = 'FLUSHING...';
+
+				// Add flushing classes for intense animation
+				water.classList.add('flushing');
+				swirl.classList.add('flushing');
+				bubbles.forEach((bubble) => {
+					if (bubble) bubble.classList.add('flushing');
+				});
+
+				// After 3 seconds, start refilling
+				setTimeout(() => {
+					if (water && swirl) {
+						water.classList.remove('flushing');
+						water.classList.add('refilling');
+						swirl.classList.remove('flushing');
+						bubbles.forEach((bubble) => {
+							if (bubble) bubble.classList.remove('flushing');
+						});
+					}
+				}, 3000);
+
+				// After 6 seconds total, restore normal state
+				setTimeout(() => {
+					if (water && button) {
+						water.classList.remove('refilling');
+						button.removeAttribute('disabled');
+						button.textContent = '🚽 FLUSH 🚽';
+					}
+				}, 6000);
+			}
+
+			// Add event listeners when DOM is loaded
+			document.addEventListener('DOMContentLoaded', () => {
+				// Add flush button event listener
+				const flushButton = document.getElementById('flushButton');
+				if (flushButton) {
+					flushButton.addEventListener('click', flush);
+				}
+
+				// Add some random variation to bubble delays
+				const bubbles = [
+					document.getElementById('bubble1'),
+					document.getElementById('bubble2'),
+					document.getElementById('bubble3'),
+					document.getElementById('bubble4'),
+				];
+
+				bubbles.forEach((bubble, index) => {
+					if (bubble) {
+						bubble.style.animationDelay = `${index * 1.2}s`;
+					}
+				});
+			});
+		</script>
 	</body>
 </html>
