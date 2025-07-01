@@ -61,7 +61,7 @@
 
 			.drain-hole {
 				position: absolute;
-				bottom: 80px;
+				bottom: 60px;
 				left: 50%;
 				transform: translateX(-50%);
 				width: 35px;
@@ -144,7 +144,8 @@
 			}
 
 			.swirl.flushing {
-				animation: swirl-flush 0.3s linear infinite;
+				animation: swirl-flush 1.5s cubic-bezier(0.4, 0, 0.2, 1) 1;
+				/* 1.5s to match water-shrink-to-hole duration, only 1 iteration */
 			}
 
 			.swirl::before {
@@ -315,6 +316,9 @@
 			@keyframes swirl-flush {
 				0% {
 					transform: rotate(0deg);
+				}
+				90% {
+					transform: rotate(360deg);
 				}
 				100% {
 					transform: rotate(360deg);
