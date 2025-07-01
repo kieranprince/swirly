@@ -14,7 +14,10 @@
 				margin: 0;
 				padding: 0;
 				min-height: 100vh;
-				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				/* Animated dimmed rainbow background */
+				background: linear-gradient(90deg, #7a0040, #7a4c00, #7a7a00, #007a00, #007a7a, #002b7a, #7a007a, #7a0040);
+				background-size: 2000% 100%;
+				animation: rainbow-bg 18s linear infinite;
 				font-family: 'Arial', sans-serif;
 				display: flex;
 				flex-direction: column;
@@ -22,21 +25,30 @@
 				justify-content: center;
 				overflow-x: hidden;
 			}
+			@keyframes rainbow-bg {
+				0% {
+					background-position: 0% 50%;
+				}
+				100% {
+					background-position: 100% 50%;
+				}
+			}
 
 			.title {
 				color: white;
-				font-size: 3rem;
-				margin-bottom: 1rem;
-				text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+				font-size: 4rem;
+				margin-bottom: 1.5rem;
+				text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7);
 				animation: pulse 2s ease-in-out infinite alternate;
 			}
 
 			.subtitle {
-				color: rgba(255, 255, 255, 0.8);
-				font-size: 1.2rem;
-				margin-bottom: 2rem;
+				color: rgba(255, 255, 255, 0.9);
+				font-size: 1.6rem;
+				margin-bottom: 2.5rem;
 				text-align: center;
-				max-width: 600px;
+				max-width: 700px;
+				text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
 			}
 
 			.toilet-container {
