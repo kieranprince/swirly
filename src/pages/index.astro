@@ -519,9 +519,54 @@
 			</div>
 		</div>
 
+		<!-- Fullscreen popup message -->
+		<div
+			id="popup-message"
+			style="
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		color: #fff;
+		background: rgba(0, 0, 0, 0.8);
+		padding: 0;
+		border-radius: 0;
+		font-size: 3rem;
+		font-weight: bold;
+		box-shadow: none;
+		z-index: 99999;
+		text-align: center;
+		letter-spacing: 2px;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.4s;
+		display: none;
+		align-items: center;
+		justify-content: center;
+		margin: 0;
+	"
+		>
+		</div>
+
 		<button class="flush-button" id="flushButton">FLUSH 🚽</button>
 
 		<script>
+			function showPopup(message: string, duration: number = 5000) {
+				const popup = document.getElementById('popup-message');
+				if (!popup) return;
+				popup.textContent = message;
+				popup.style.display = 'flex';
+				popup.style.opacity = '0.97';
+				setTimeout(() => {
+					popup.style.opacity = '0';
+				}, duration - 400);
+				setTimeout(() => {
+					popup.style.display = 'none';
+				}, duration);
+			}
+
 			function flush() {
 				const water = document.getElementById('water');
 				const swirl = document.getElementById('swirl');
@@ -558,6 +603,8 @@
 						bubbles.forEach((bubble) => {
 							if (bubble) bubble.classList.remove('flushing');
 						});
+						// Show popup after swirly
+						showPopup("You're bad", 5000);
 					}
 				}, 3000);
 
