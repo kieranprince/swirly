@@ -12,7 +12,7 @@
 		<style>
 			body {
 				margin: 0;
-				padding: 0;
+				padding: 2.5vw 2vw 2vw 2vw;
 				min-height: 100vh;
 				/* Animated dimmed rainbow background */
 				background: linear-gradient(90deg, #7a0040, #7a4c00, #7a7a00, #007a00, #007a7a, #002b7a, #7a007a, #7a0040);
@@ -22,7 +22,7 @@
 				display: flex;
 				flex-direction: column;
 				align-items: center;
-				justify-content: center;
+				justify-content: flex-start;
 				overflow-x: hidden;
 			}
 			@keyframes rainbow-bg {
@@ -53,9 +53,19 @@
 
 			.toilet-container {
 				position: relative;
-				width: 300px;
-				height: 400px;
-				margin: 2rem 0;
+				width: min(90vw, 420px);
+				height: min(120vw, 560px);
+				margin: 5vw 0 5vw 0;
+				padding: 5vw 4vw 5vw 4vw;
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: rgba(255, 255, 255, 0.01);
+				border-radius: 2vw;
+				flex-grow: 1;
+				min-height: 0;
+				min-width: 0;
 			}
 
 			.toilet-bowl {
@@ -77,13 +87,13 @@
 			/* Toilet tank (back) rectangle */
 			.toilet-back {
 				position: absolute;
-			top: -60px;
-			left: 10px;
-			width: 280px;
-			height: 90px;
+				top: -6%;
+				left: 2.5%;
+				width: 95%;
+				height: 23%;
 				background: #f0f0f0;
 				border: 8px solid #fff;
-				border-radius: 12px 12px 8px 8px;
+				border-radius: 16px 16px 10px 10px;
 				box-shadow:
 					0 8px 24px rgba(0, 0, 0, 0.1),
 					inset 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -280,23 +290,32 @@
 				transition: all 0.3s ease;
 				text-transform: uppercase;
 				letter-spacing: 1px;
+				position: fixed;
+				left: 50%;
+				bottom: 2.5vw;
+				transform: translateX(-50%);
+				z-index: 10000;
+				max-width: 90vw;
 			}
 
 			.flush-button:hover {
-				transform: translateY(-2px);
+				/* Only apply vertical translation, not horizontal */
+				transform: translateX(-50%) translateY(-2px);
 				box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 				background: linear-gradient(145deg, #5cbf60, #4caf50);
 			}
 
 			.flush-button:active {
-				transform: translateY(0px);
+				/* Keep the button centered horizontally and only move vertically if needed */
+				transform: translateX(-50%) translateY(0);
 				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 			}
 
 			.flush-button:disabled {
 				background: #666;
 				cursor: not-allowed;
-				transform: none;
+				/* Keep the button centered even when disabled */
+				transform: translateX(-50%) translateY(0);
 			}
 
 			.flush-sound {
@@ -524,8 +543,8 @@
 		</style>
 	</head>
 	<body>
-		<h1 class="title">Reedem your FREE Swirly!</h1>
-		<p class="subtitle">You've earned it. Trust me. You have.</p>
+		<h1 class="title" style="margin-bottom: 2.2rem; margin-top: 1.2rem;">Reedem your FREE Swirly!</h1>
+		<p class="subtitle" style="margin-bottom: 2.8rem;">You've earned it. Trust me. You have.</p>
 
 		<div class="toilet-container">
 			<div class="toilet-back"></div>
